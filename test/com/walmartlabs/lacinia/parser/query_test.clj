@@ -73,7 +73,12 @@
   (testing "unicode"
     (is (= {:id "1138"
             :newHomePlanet "❄ＨＯＴＨ❄"}
-           (args "mutation { changeHeroHomePlanet(id: \"1138\", newHomePlanet: \"\\u2744\\uff28\\uff2f\\uff34\\uff28\\u2744\") {name}}")))))
+           (args "mutation { changeHeroHomePlanet(id: \"1138\", newHomePlanet: \"\\u2744\\uff28\\uff2f\\uff34\\uff28\\u2744\") {name}}"))))
+
+  (testing "not unicode"
+    (is (= {:id "1139"
+            :newHomePlanet "\\u2744\\uff28\\uff2f\\uff34\\uff28\\u2744"}
+           (args "mutation { changeHeroHomePlanet(id: \"1139\", newHomePlanet: \"\\\\u2744\\\\uff28\\\\uff2f\\\\uff34\\\\uff28\\\\u2744\") {name}}")))))
 
 (deftest query-reserved-word
   ;; Use 'query', 'mutation', and 'subscription' in various unusual places.

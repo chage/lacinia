@@ -54,8 +54,12 @@
   (-> v
       ;; Because of how parsing works, the string literal includes the enclosing quotes
       (subs 1 (dec (.length v)))
-      (str/replace #"\\([\\\"\/bfnrt])" #(unescape-ascii (second %)))
-      (str/replace #"\\u([A-Fa-f0-9]{4})" #(unescape-unicode (second %)))))
+      (str/replace #"\\(\\|u[A-Fa-f0-9]{4}|[\"\/bfnrt])"
+                   #(let [s (second %)]
+                      (cond
+                        (= s "\\") "\\"
+                        (= (first s) \u) (unescape-unicode (subs s 1))
+                        :else (unescape-ascii s))))))
 
 (defn ^:private indent-of
   [s]
